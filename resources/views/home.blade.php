@@ -4,8 +4,6 @@
         <tbody>
         <tr>
             <td><a href="{{url('add-category')}}">Add Category</a></td>
-            <td><a href="{{url('add-sub-category')}}">Add Sub Category</a></td>
-            <td><a href="{{url('add-nested-sub-category')}}">Add Nested Sub Category</a></td>
             <td><a href="{{url('add-product')}}">Add Product</a></td>
         </tr>
         <tr>

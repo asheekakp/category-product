@@ -4,23 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use App\Category;
-use App\SubCategory;
+use Redirect;
 use Illuminate\Http\Request;
 use Validator;
 
 class ProductController extends Controller
 {
-    public function addProduct()
+    public function addProduct($id = null)
     {
-        $categories = Category::all();        
-        return view('product.add_product', compact('categories'));
+        $edit = null;
+        if ($id) {
+            $edit = Product::find($id);
+        }
+     
+        $categorys = Category::category();
+        return view('product.add_product', compact('categorys','edit'));
     }
 
     public function saveProduct(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'product' => 'required|unique:product,product_name',
-            'sub_category' => 'required',
+            'category' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -29,14 +34,14 @@ class ProductController extends Controller
         } else {
             $product = new Product();
             $product->product_name = $request->product;
-            $product->sub_category_id = $request->sub_category;
-            $category = SubCategory::find($request->sub_category);
+            $product->category_id = $request->category;
+            $category = Category::find($request->category);
             $product->url = $category->url . "/" . $this->URLGenerate($request->product);
             $product->save();
         }
 
-        $categories = Category::all();        
-        return view('product.add_product', compact('categories'));
+        return Redirect::route('view-product');
+  
     }
 
     public function URLGenerate($text)
@@ -64,7 +69,7 @@ class ProductController extends Controller
     {
         $product = Product::all();
         foreach ($product as $p) {
-            $p->sub_category = SubCategory::find($p->sub_category_id)->sub_category_name;
+            $p->category = Category::find($p->category_id)->category_name;
         }
         return view('product.view_product', compact('product'));
 

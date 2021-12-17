@@ -17,8 +17,8 @@ class CreateProductTable extends Migration
             $table->bigIncrements('id');
             $table->string('product_name');
             $table->string('url');
-            $table->bigInteger('sub_category_id')->unsigned()->nullable();
-            $table->foreign('sub_category_id')->references('id')->on('sub_category');
+            $table->bigInteger('category_id')->unsigned()->nullable();
+            $table->foreign('category_id')->references('id')->on('category');
             $table->timestamps();
         });
     }
